@@ -8,7 +8,7 @@ INCLUDES = -Iinclude
 #LFLAGS = -static
 LIBS = -lssl -lcrypto -pthread -lz
 
-SRCS = main.cpp
+SRCS = main.cpp crc32.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: $(PROJECT)
