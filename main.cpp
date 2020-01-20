@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 
@@ -49,7 +50,17 @@ void doList(const std::string& input)
     }
 
     for (const auto& b: blocks) {
-        std::cout << std::string(b.filename, 32) << "\n";
+        std::string filename;
+        for (uint8_t i = 0; i < 32; i += 2) {
+            char c = b.partition[i];
+            if (c == '\0') {
+                break;
+            }
+
+            filename += c;
+        }
+
+        std::cout << filename << "\n";
     }
 
     stream.close();
@@ -80,7 +91,22 @@ void doUnpack(const std::string& input, const std::string& output)
         std::vector<char> data;
         data.resize(b.size);
 
-        std::string filename(b.filename, 32);
+        std::string filename;
+        for (uint8_t i = 0; i < 32; i += 2) {
+            char c = b.partition[i];
+            if (c == '\0') {
+                break;
+            }
+
+            if (c == ':') {
+                c = '_';
+            }
+
+            filename += c;
+        }
+
+        filename += ".img";
+
         std::cout << filename << "\n";
         stream.read(data.data(), b.size);
 
